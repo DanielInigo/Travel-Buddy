@@ -4,10 +4,10 @@
     "slug": "Travel",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/restaurants.png",
+    "icon": "./assets/adve.jpg",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/restaurants.png",
+      "image": "./assets/loading.gif",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

@@ -5,7 +5,6 @@ import global from "../global";
 import * as Animatable from 'react-native-animatable';
 import { HeroImage } from "../assets";
 import { Adventure } from "../assets";
-import { Plain } from "../assets";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -17,7 +16,7 @@ const HomeScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView className="flex-1 relative" style={global.droidSafeArea}>
+    <SafeAreaView className="flex-1 relative bg-[#f0f2f5]" style={global.droidSafeArea}>
       <View className="flex-row px-6 mt-8 items-center space-x-5">
         <View className="w-20 h-20 bg-black rounded-full items-center justify-center">
           <Image source={Adventure} className="h-full w-full object-cover" />
