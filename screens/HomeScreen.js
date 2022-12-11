@@ -1,10 +1,11 @@
-import { View, Text, SafeAreaView, Image, Touchable, TouchableOpacity } from "react-native";
+import { View, Text, SafeAreaView, Image, ImageBackground, TouchableOpacity } from "react-native";
 import React, { useLayoutEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import global from "../global";
 import * as Animatable from 'react-native-animatable';
 import { HeroImage } from "../assets";
 import { Adventure } from "../assets";
+import { Plain1 } from "../assets";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -16,7 +17,13 @@ const HomeScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView className="flex-1 relative bg-[#f0f2f5]" style={global.droidSafeArea}>
+    <View>
+      <ImageBackground
+        source={Plain1}
+        resizeMode="stretch"
+        className="h-full w-full justify-center align-middle"
+      >
+    <SafeAreaView className="flex-1 relative " style={global.droidSafeArea}>
       <View className="flex-row px-6 mt-8 items-center space-x-5">
         <View className="w-20 h-20 bg-black rounded-full items-center justify-center">
           <Image source={Adventure} className="h-full w-full object-cover" />
@@ -26,10 +33,10 @@ const HomeScreen = () => {
         </Text>
       </View>
       <View className="px-6 mt-4 space-y-3">
-        <Text className="text-[#00BCC9] text-[23px] font-bold">
+        <Text className="text-[#4164f0] text-[23px] font-bold">
           Travel is an investment in yourself
         </Text>
-        <Text className="text-[#3C6072] text-base mt-3">
+        <Text className="text-black text-base mt-3">
           “Travel is the only thing you buy that makes you richer”. We
           completely swear by this and believe in fulfilling travel dreams that
           make you invariably rich by the day
@@ -43,7 +50,7 @@ const HomeScreen = () => {
         source={HeroImage} className="h-full w-full object-cover" />
 
         <TouchableOpacity 
-        onPress={() => navigation.navigate("Discover")}
+        onPress={() => navigation.navigate("Login")}
         className="absolute bottom-20 w-24 h-24 border-1-2 border-r-2 border-t-4 border-[#00BCC9] rounded-full items-center justify-center">
           <Animatable.View 
           animation="pulse"
@@ -55,6 +62,8 @@ const HomeScreen = () => {
         </TouchableOpacity> 
         </View>
     </SafeAreaView>
+    </ImageBackground>
+    </View>
   );
 };
 

@@ -26,8 +26,12 @@ const ItemScreen = ({ route }) => {
                 }}
                 className="w-full h-72 mt-10 object-cover rounded-2xl"
                 />
-            </View>
 
+                <View>
+                  
+                </View>
+
+            </View>
         </ScrollView>
     </View>
     

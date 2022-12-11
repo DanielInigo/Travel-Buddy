@@ -7,7 +7,7 @@ const ItemCardContainer = ({ imageSrc, title, location, data }) => {
     const navigation=useNavigation();
     return (
     <TouchableOpacity
-    onPress={()=>navigation.navigate("ItemScreen",{param: data})}
+    onPress={()=>navigation.navigate("Display",{param: data})}
     >
         <View className="rounded-md border border-gray-200 bg-gray-100 space-y-2 px-3 py-2 shadow-md">
           <Image
