@@ -12,8 +12,8 @@ export const getLongData = async (selected) => {
                 name : selected ,
         },
         headers: {
-            'X-RapidAPI-Key': 'f97d5452e1msh196e9b6b8282602p19fa80jsna48df42b7893',
-    'X-RapidAPI-Host': 'opentripmap-places-v1.p.rapidapi.com'
+          'X-RapidAPI-Key': '4a4691f7dfmsh8d9c1273bda6964p17367cjsn130c647cb1bb',
+          'X-RapidAPI-Host': 'opentripmap-places-v1.p.rapidapi.com'
       },
     }
     );

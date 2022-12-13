@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { Attractions, Hotels, NotFound, Profile, Restaurants } from "../assets";
+import { Attractions, Hotels, Loading, Profile, Restaurants } from "../assets";
 import { Image } from "react-native-animatable";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MenuContainer from "../components/MenuContainer";
@@ -23,7 +23,7 @@ import { SelectList } from "react-native-dropdown-select-list";
 const Discover = () => {
   const navigation = useNavigation();
   const [type, setType] = useState("hotels");
-  const [isLoading, setisLoading] = useState(false);
+  //const [isLoading, setisLoading] = useState(false);
   const [mainData, setmainData] = useState([]);
   const [PosLat,setPosLat]=useState(null);
   const[PosLon,setPosLon]=useState(null);
@@ -49,7 +49,7 @@ const Discover = () => {
   }, []);
 
   useEffect (()=>{
-    setisLoading(true);
+    //setisLoading(true);
     getLatiData(selected).then((lat)=>{
       //console.log(selected);
       setPosLat(lat);
@@ -60,30 +60,30 @@ const Discover = () => {
       setPosLon(lon);
       //console.log(PosLon)
     });
-    getPlaceData(bl_lat,bl_lng,tr_lat,tr_lng,type).then((data)=>{
-      setmainData(data);
-      //console.log(data);
-      setInterval(()=>{
-        setisLoading(false); 
-      },2000);
-    });
-    
-  },[bl_lat,bl_lng,tr_lat,tr_lng,type,selected]);
-
-  
-  const handleSelect=()=>{
     const bl_lat=PosLat?.lat;
     const tr_lat=PosLat?.lat+0.5;
     const bl_lng=PosLon?.lon;
-    const tr_lng=PosLon?.lon-0.5;
+    const tr_lng=PosLon?.lon+0.5;
     //console.log(bl_lat);
     //console.log(tr_lng);
     setBl_lat(bl_lat);
     setTr_lat(tr_lat);
     setBl_lng(bl_lng);
     setTr_lng(tr_lng);
-  };
+    getPlaceData(bl_lat,bl_lng,tr_lat,tr_lng,type).then((data)=>{
+      setmainData(data);
+      //console.log(data);
+      // setInterval(()=>{
+      //   setisLoading(false); 
+      // },2000);
+    });
+    
+  },[bl_lat,bl_lng,tr_lat,tr_lng,type,selected]);
 
+  const handleSelect=()=>{
+    setType("");
+  };
+  
   return (
     <View>
       <ImageBackground
@@ -131,7 +131,7 @@ const Discover = () => {
         /> */}
         <View className="m-auto bg-white w-full">
         <SelectList 
-        size={50}
+        size={100}
         data={data}
         setSelected={setSelected}
         onSelect={handleSelect}
@@ -139,11 +139,11 @@ const Discover = () => {
         </View>
       </View>
 
-      {isLoading ? (
+      {/* {isLoading ? (
         <View className="flex-1 items-center justify-center">
           <ActivityIndicator size="large" color="#0B646B" />
         </View>
-      ) : (
+      ) : ( */}
         <ScrollView>
           <View className="flex-row items-center justify-between px-8 mt-8">
             
@@ -200,13 +200,14 @@ const Discover = () => {
                 </>
               ) : (
                 <>
-                  <View className="w-full h-[400px] items-center space-y-8 justify-center">
+                  <View className="w-full h-[300px] items-center space-y-10 justify-center">
                     <Image
-                      source={NotFound}
+                      source={Loading}
                       className="w-32 h-32 object-cover"
                     />
+                    {/* <ActivityIndicator size="large" color="black" /> */}
                     <Text className="text-2xl text-[#428288] font-semibold">
-                      Opps...No Data Found
+                      Welcome...Search Places!!
                     </Text>
                   </View>
                 </>
@@ -214,7 +215,6 @@ const Discover = () => {
             </View>
           </View>
         </ScrollView>
-      )}
     </SafeAreaView>
     </ImageBackground>
     </View>
