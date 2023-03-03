@@ -21,12 +21,18 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.daniel_inigo.Travel",
       "adaptiveIcon": {
         "backgroundColor": "#FFFFFF"
       }
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "7f6feade-b714-4298-8bff-4edcc3df0fdb"
+      }
     }
   }
 }

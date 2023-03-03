@@ -4,14 +4,16 @@ import {
   SafeAreaView,
   ScrollView,
   ActivityIndicator,
+  Button,
+  TextInput,
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState, useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Attractions, Hotels, Loading, Profile, Restaurants } from "../assets";
 import { Image } from "react-native-animatable";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+//import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MenuContainer from "../components/MenuContainer";
 import ItemCardContainer from "../components/ItemCardContainer";
 import { getPlaceData } from "../api/DataScrab";
@@ -19,28 +21,32 @@ import { getLatiData } from "../api/LatiScrab";
 import { getLongData } from "../api/LongScrab";
 import { Plain2 } from "../assets";
 import { SelectList } from "react-native-dropdown-select-list";
+import cities from "../data/index.js"
 
 const Discover = () => {
   const navigation = useNavigation();
-  const [type, setType] = useState("hotels");
+  const [type, setType] = useState("");
   //const [isLoading, setisLoading] = useState(false);
   const [mainData, setmainData] = useState([]);
   const [PosLat,setPosLat]=useState(null);
   const[PosLon,setPosLon]=useState(null);
-
+  const textInputRef = useRef(null);
+  const [showOptions, setShowOptions] = useState(false);
   const [selected,setSelected]=useState("");
   const [bl_lat,setBl_lat]=useState(null);
   const [bl_lng,setBl_lng]=useState(null);
   const [tr_lat,setTr_lat]=useState(null);
   const [tr_lng,setTr_lng]=useState(null);
+  const [options, setOptions] = useState([]);
+  const [query, setQuery] = useState('');
 
-  const data=[
-    {value:'Delhi'},
-    {value:'Mumbai'},
-    {value:'Chennai'},
-    {value:'Kolkata'},
-    {value:'Madurai'},
-  ];
+  // const data=[
+  //   {value:'Delhi'},
+  //   {value:'Mumbai'},
+  //   {value:'Chennai'},
+  //   {value:'Kolkata'},
+  //   {value:'Madurai'},
+  // ];
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -48,22 +54,29 @@ const Discover = () => {
     });
   }, []);
 
-  useEffect (()=>{
-    //setisLoading(true);
-    getLatiData(selected).then((lat)=>{
+  const onSubmit = async (place) => {
+ 
+
+     //setisLoading(true);
+    getLatiData(query).then((lat)=>{
       //console.log(selected);
       setPosLat(lat);
       //console.log(PosLat)
     });
-    getLongData(selected).then((lon)=>{
+    getLongData(query).then((lon)=>{
       //console.log(selected);
       setPosLon(lon);
       //console.log(PosLon)
     });
-    const bl_lat=PosLat?.lat;
-    const tr_lat=PosLat?.lat+0.5;
-    const bl_lng=PosLon?.lon;
-    const tr_lng=PosLon?.lon+0.5;
+ 
+   }  ;
+
+  useEffect (()=>{
+    
+    const bl_lat=PosLat?.lat+0.25;
+    const tr_lat=PosLat?.lat-0.25;
+    const bl_lng=PosLon?.lon+0.25;
+    const tr_lng=PosLon?.lon-0.25;
     //console.log(bl_lat);
     //console.log(tr_lng);
     setBl_lat(bl_lat);
@@ -78,11 +91,33 @@ const Discover = () => {
       // },2000);
     });
     
-  },[bl_lat,bl_lng,tr_lat,tr_lng,type,selected]);
+  },[bl_lat,bl_lng,tr_lat,tr_lng,type,PosLat,PosLon]);
 
-  const handleSelect=()=>{
+  // const handleSelect=()=>{
+  //   setType("");
+  // };
+
+  const handleSearch = (e) => {
     setType("");
-  };
+    setQuery(e);
+    // Filter city names based on the query
+    console.log(query);
+    const newOptions = cities.filter(city => city.toLowerCase().includes(query.toLowerCase()));
+    //console.log(newOptions)
+    if(newOptions?.length===0){
+      setOptions(["No City in this name"]);
+    }
+    else
+    setOptions(newOptions);
+    setShowOptions(true);
+  }
+  //console.log(cities.length)
+
+  const handleOptionSelect = (option) => {
+    console.log(option)
+    setQuery(option);
+    setShowOptions(false);
+  }
   
   return (
     <View>
@@ -112,32 +147,52 @@ const Discover = () => {
 
       </View>
 
-      <View className="flex-row mx-4 rounded-xl py-1 px-4 mt-4">
-        {/* <GooglePlacesAutocomplete
-          GooglePlacesDetailsQuery={{ fields: "geometry" }}
-          placeholder="Search"
-          fetchDetails={true}
-          onPress={(data, details = null) => {
-            console.log(details?.geometry?.viewport);
-            setBl_lat(details?.geometry?.viewport?.southwest?.lat);
-            setBl_lng(details?.geometry?.viewport?.southwest?.lng);
-            setTr_lat(details?.geometry?.viewport?.northeast?.lat);
-            setTr_lng(details?.geometry?.viewport?.northeast?.lng);
-          }}
-          query={{
-            key: "AIzaSyDWpuVw2apN-XgX3gmrzsHrZgr1AG4sCxQ",
-            language: "en",
-          }}
-        /> */}
-        <View className="m-auto bg-white w-full">
-        <SelectList 
+      <View className="flex-row ">
+        
+        {/* <View className="m-auto bg-white w-full"> */}
+        {/* //Serachbar */}
+
+
+        <View className="m-auto mt-6">
+      
+     <TextInput 
+        className="bg-white w-72 border-2  border-gray-500 rounded-lg py-2 px-4 block z-50 "
+        type="text" 
+        placeholder="Where to...?"  
+        value={query} 
+        ref={textInputRef}
+        onChangeText={e=>handleSearch(e)}
+      />
+      <View className="w-[25%] m-auto mt-3">
+      <Button onPress={()=>onSubmit(query)} className="bg-indigo-500 hover:bg-indigo-700  text-white font-bold py-1 px-2 rounded-full" title="Search"/>
+      </View>
+
+      {showOptions && (
+        <View className="z-50  row-span-5 row-start-4 bg-white  rounded-lg shadow-lg mt-2">
+          {options.splice(0,5).map((option, index) => (
+            <Button
+              key={index} 
+              className="cursor-pointer p-2 bg-grey-500 font-semibold hover:bg-gray-100"
+              onPress={() => handleOptionSelect(option)}
+              title= {option}
+            />
+          ))}
+          
+        </View>
+      )}
+    </View>
+
+
+
+          {/* // */}
+        {/* <SelectList 
         size={100}
         data={data}
         setSelected={setSelected}
         onSelect={handleSelect}
-        />
+        /> */}
         </View>
-      </View>
+      {/* </View> */}
 
       {/* {isLoading ? (
         <View className="flex-1 items-center justify-center">

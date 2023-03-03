@@ -162,11 +162,11 @@ const ItemScreen = ({ route }) => {
             </View>
             )}
           </View>
-          <TouchableOpacity className=" w-[180px] h-[50px] mx-auto mt-7 items-center justify-center rounded-lg bg-[#06B2BE]  mb-12">
+          {/* <TouchableOpacity className=" w-[180px] h-[50px] mx-auto mt-7 items-center justify-center rounded-lg bg-[#06B2BE]  mb-12">
               <Text className="text-2xl font-semibold uppercase tracking-wide text-gray-100">
                 Book Now
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
         </ScrollView>
       </View>
     </SafeAreaView>
